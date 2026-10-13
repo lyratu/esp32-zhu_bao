@@ -1,0 +1,5 @@
+dependencies:
+  idf: ">=5.0"
+  # Components moved out of IDF core into the registry as of IDF v6:
+  espressif/mqtt: "*"
+  espressif/cjson: "*"

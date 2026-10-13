@@ -1,0 +1,21 @@
+# ESP-IDF build output
+build/
+
+# Managed components are re-fetched from the component registry
+# (main/idf_component.yml) on the first build
+managed_components/
+
+# Serial log snapshots
+boot_full.txt
+boot_now.txt
+
+# Python bytecode
+__pycache__/
+
+# VS Code / IDE
+.vscode/
+.cache/
+
+# macOS / Windows noise
+.DS_Store
+Thumbs.db

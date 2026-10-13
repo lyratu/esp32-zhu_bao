@@ -1,0 +1,13 @@
+CONFIG_IDF_TARGET="esp32c3"
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+CONFIG_PARTITION_TABLE_SINGLE_APP_LARGE=y
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+CONFIG_LOG_DEFAULT_LEVEL=3
+CONFIG_MBEDTLS_CERTIFICATE_BUNDLE=y
+
+# Keep BOTH the A and the AAAA answer for a hostname. With the default of 1,
+# lwIP stores only the first DNS reply, which for api.bambulab.cn/.com is the
+# IPv6 address - unroutable on this IPv4-only board, so every request failed
+# with ESP_ERR_HTTP_CONNECT. esp_http_client is additionally pinned to IPv4
+# via HTTP_ADDR_TYPE_INET in net/bambu_api.c; this is the second safety net.
+CONFIG_LWIP_DNS_MAX_HOST_IP=4
