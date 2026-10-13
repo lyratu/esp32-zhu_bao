@@ -1,6 +1,8 @@
-# 竹报 esp32-bambu_bao
+# 竹报 ZhuBao
 
 > 竹报平安 —— 一块小屏，向你「报」拓竹打印机的平安。
+
+GitHub 仓库：[esp32-zhu_bao](https://github.com/lyratu/esp32-zhu_bao)
 
 **竹报**是一台基于 ESP32-C3 + 0.96 寸 OLED（SSD1306/SH1106，128×64）的拓竹（Bambu Lab）打印状态显示器。设备通过 WiFi 连接拓竹云 MQTT，独立运行、实时刷新，不需要电脑常驻：
 
