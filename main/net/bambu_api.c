@@ -118,27 +118,28 @@ typedef struct {
 
 /* Pinned trust anchors for the Bambu cloud.
  *
- * The two regions do NOT share a CA, which is why a single pinned root used
- * to work for .cn and fail for .com:
+ * The regions used to differ (api.bambulab.cn on GlobalSign R3, .com on
+ * DigiCert), which is why a single pinned root used to work for .cn and fail
+ * for .com. On 2026-10-13 Bambu re-issued the *.bambulab.cn certificate on
+ * the DigiCert chain as well - every API host now presents:
  *
- *   api.bambulab.cn  -> GlobalSign Root CA - R3
- *        (leaf issued by "GlobalSign GCC R3 DV TLS CA 2020")
- *   api.bambulab.com -> DigiCert Global Root G2
- *        (leaf issued by "DigiCert Encryption Everywhere DV TLS CA - G2")
+ *   leaf "*.bambulab.cn" / "*.bambulab.com"
+ *     <- "DigiCert Encryption Everywhere DV TLS CA - G2"
+ *       <- DigiCert Global Root G2
  *
- * The ESP-IDF certificate bundle never matches either chain at runtime on
- * this hardware, even though both verify fine on a PC (openssl verify -> OK).
- * Pinning is therefore per-host: see pinned_root_for(). */
+ * (The MQTT broker has been on this same root all along.) The ESP-IDF
+ * certificate bundle never matches these chains at runtime on this hardware,
+ * even though they verify fine on a PC - so we keep pinning, just the one
+ * root that now covers everything. */
 #define BAMBU_USE_PINNED_ROOT 1
 
-/* Pick the CA bundle that matches the host in `url`. MQTT uses the .cn broker
- * on this build, so GlobalSign is the sensible default. */
+/* DigiCert Global Root G2 covers every Bambu cloud host (both regions, API
+ * and MQTT). GlobalSign R3 is kept in cloud_roots.h only as a fallback in
+ * case Bambu ever splits the chains again. */
 static const char *pinned_root_for(const char *url)
 {
-    if (url && strstr(url, "api.bambulab.com")) {
-        return DIGICERT_GLOBAL_ROOT_G2_PEM;
-    }
-    return GLOBALSIGN_ROOT_R3_PEM;
+    (void)url;
+    return DIGICERT_GLOBAL_ROOT_G2_PEM;
 }
 
 /* one attempt; split out so http_request() can retry transparently */
